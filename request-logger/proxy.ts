@@ -53,8 +53,11 @@ const STATE_FILE = path.join(HERE, ".agent-choice.json");
 
 /** Build a filesystem-safe base name: 2026-07-07T14-32-05-123_claude-code */
 function baseName(target: ProxyTarget): string {
-  const iso = new Date().toISOString(); // 2026-07-07T14:32:05.123Z
-  const stamp = iso.replace(/:/g, "-").replace(".", "-").replace("Z", "");
+  const now = new Date();
+  const pad = (value: number, length = 2) => String(value).padStart(length, "0");
+  const date = `${pad(now.getFullYear(), 4)}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const time = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}-${pad(now.getMilliseconds(), 3)}`;
+  const stamp = `${date}T${time}`;
   return `${stamp}_${target.agent}`;
 }
 
